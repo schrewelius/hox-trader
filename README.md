@@ -16,3 +16,10 @@ $ docker-compose up
 ```sh
 $ git pull origin master
 ```
+
+## Deploy in production
+
+```sh
+$ docker-compose -f docker-compose.yml build
+$ docker-compose up
+```

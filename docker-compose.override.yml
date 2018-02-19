@@ -1,0 +1,28 @@
+version: "2"
+services:
+  mongo-seed:
+    image: mongo
+    command: bash -c
+             "mongoimport --host mongodb --username $DB_USER --password $DB_PASSWORD --authenticationDatabase admin --db test --collection roles --type json --file /roles.json --jsonArray &&
+              mongoimport --host mongodb --username $DB_USER --password $DB_PASSWORD --authenticationDatabase admin --db test --collection users --type json --file /users.json --jsonArray"
+    volumes:
+      - ./mongo-seed/roles.json:/roles.json
+      - ./mongo-seed/users.json:/users.json
+    depends_on:
+      - mongodb
+  server:
+    build:
+      args:
+        - NODE_ENV=development
+    command: ["npm", "run", "dev"]
+    volumes:
+      - ./hox-server:/opt/server
+    depends_on:
+      - mongo-seed
+  client:
+    build:
+      args:
+        - NODE_ENV=development
+    command: ["npm", "run", "dev"]
+    volumes:
+      - ./hox-client/src:/opt/client/src

@@ -3,13 +3,15 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --prod --host 0.0.0.0 --proxy-config proxy.conf.prod.json",
-    "dev": "ng serve --port 4300 --proxy-config proxy.conf.json",
+    "dev": "ng serve --dev --host 0.0.0.0 --proxy-config proxy.conf.json --poll 1000",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
   "dependencies": {
+    "@angular/cli": "1.6.5",
+    "@angular/compiler-cli": "^5.2.1",
     "@angular/animations": "^5.2.1",
     "@angular/cdk": "^5.1.0",
     "@angular/common": "^5.2.1",

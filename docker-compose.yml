@@ -8,21 +8,11 @@ services:
     command: mongod --port 27017 --bind_ip_all
     ports:
       - '27017:27017'
-  mongo-seed:
-    image: mongo
-    command: bash -c
-             "mongoimport --host mongodb --username $DB_USER --password $DB_PASSWORD --authenticationDatabase admin --db test --collection roles --type json --file /roles.json --jsonArray &&
-              mongoimport --host mongodb --username $DB_USER --password $DB_PASSWORD --authenticationDatabase admin --db test --collection users --type json --file /users.json --jsonArray"
-    volumes:
-      - ./mongo-seed/roles.json:/roles.json
-      - ./mongo-seed/users.json:/users.json
-    depends_on:
-      - mongodb
   server:
     restart: always
-    build: ./hox-server
+    build:
+      context: ./hox-server
     environment:
-      PORT: 4000
       DATABASE: mongodb:27017
       DB_USER: $DB_USER
       DB_PASSWORD: $DB_PASSWORD
@@ -30,9 +20,10 @@ services:
     ports:
       - '4000:4000'
     depends_on:
-      - mongo-seed
+      - mongodb
   client:
-    build: ./hox-client
+    build:
+      context: ./hox-client
     ports:
       - '4200:4200'
     depends_on:
